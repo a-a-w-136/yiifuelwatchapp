@@ -1,6 +1,17 @@
 <?php
 /*
+FWAUser represents a User of the fuelwatchapp. A user can register(), login(), dbparametersearch() and getcheapestinWA(). There are some auxilary functions needed to perform these tasks.
 
+Auxilary functions associated with login() and register() are validatepassword() and validateusername(). These check whether the posted data is within the allowable domains.
+
+Auxilary functions associated with dbparametersearch() are:
+1. querylocalitynames() - Queries available locality names from the database.
+2. verifyposteddata() - Verifies that the posted data is within the allowable domains.
+3. getstationsinrange() - Queries the database for stations within the range of the posted parameters.
+4. distance() - Calculates the distance between the posted locality and a given station.(ref www.geodatasource.com)
+5. justifyquerystring () - Modifies strings used in SQL. e.g. O'Conner wil be changed to O''Conner.
+
+Auxilary functions associated with getcheapestinWA() are the same as those used for dbparametersearch().
 */
 namespace app\models;
 use Yii;

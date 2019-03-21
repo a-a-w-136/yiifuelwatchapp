@@ -1,4 +1,7 @@
 <?php
+/*
+
+*/
 namespace app\models;
 use Yii;
 use yii\base\Model;
@@ -26,7 +29,7 @@ class FWAUser {
     public $cheapest_fuel = false;
     public $favourite = false;
     
-    function homepageget($log) {
+    function __construct($log) {
         $this->sql_locality_names = "SELECT locality_name FROM wa_locality ORDER BY locality_name";
         $this->fuel_types = array("Unleaded", "Premium Unleaded", "Diesel", "Brand Diesel", "e85", "RON 98", "LPG");
         $this->distances = array("1" , "5", "10", "15", "20", "25", "30", "35","45", "50", "55", "60", "65", "100", "200", "300", "400", "500", "1000");
@@ -42,8 +45,7 @@ class FWAUser {
             throw $e;
         }
     }
-    function homepagepost($log) {
-        $this->homepageget($log);
+    function post() {
         $this->fuel_search_view = new LinkedList();
         try {
             $this->verifyposteddata($_POST["locality_name"], $_POST["fuel"], $_POST["distance"]);
@@ -96,8 +98,7 @@ class FWAUser {
     function cheapestdate() {
         return $this->cheapest_date;
     }
-    function register($log) {
-        $this->log = fopen($log, 'a');
+    function register() {
         $register_clash_query = "SELECT username FROM users WHERE ";
         $register_query = "INSERT INTO users (username, password, date_created) VALUES ";
         if(!empty($_POST['username']) && !empty($_POST['password'])) {
@@ -141,8 +142,7 @@ class FWAUser {
             }
         return "Error registering: contact admin.";
     }
-    function login($log) {
-        $this->log = fopen($log, 'a');
+    function login() {
         $login_query = "SELECT username, password FROM users WHERE ";
         if(!empty($_POST['username']) && !empty($_POST['password'])) { 
                     if($this->validateusername($_POST['username']) && $this->validatepassword($_POST['password'])) {

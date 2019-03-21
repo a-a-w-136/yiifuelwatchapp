@@ -59,7 +59,7 @@ class SiteController extends Controller
     public function actionUnregister() {
         if(isset($_SESSION['username'])) {
             $user = new \app\models\FWARegisteredUser;
-            $user->deleteaccount("/var/www/yiifuelwatchapp/log/fuelwatchapp.log");
+            $user->deleteaccount($this->log);
         }
         $this->redirect('index');
     }
@@ -73,17 +73,16 @@ class SiteController extends Controller
     function processuserrequest() {
         try {
             if($_SERVER["REQUEST_METHOD"] == "GET" && !isset($_SESSION['username'])) {
-                $this->user = new \app\models\FWAUser;
-                $this->user->homepageget($this->log);
+                $this->user = new \app\models\FWAUser($this->log);
                 $this->user->cheapest_fuel = true;
             }
             else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $this->user = new \app\models\FWAUser;
-                $this->user->homepagepost($this->log);
+                $this->user = new \app\models\FWAUser($this->log);
+                $this->user->post();
             }
             else if(isset($_SESSION['username']) && $_SERVER["REQUEST_METHOD"] == "GET") {
-                $this->user = new \app\models\FWARegisteredUser;
-                $favourite_status = $this->user->profileget($this->log);
+                $this->user = new \app\models\FWARegisteredUser($this->log);
+                $favourite_status = $this->user->profileget();
                 if(!($this->user->favourite())) {
                     $this->user->cheapest_fuel = true;
                 }
@@ -100,16 +99,16 @@ class SiteController extends Controller
     /*
     The processuserregisterrequest() function is used to process a user request for the 'register' page. If the http request is for GET then $user is set to null. The result is that the registration view is rendered.
     
-    If the http request is for POST a FWAUser object is instantiated and the register() function is called. This function does some data validation. If unsuccesful the user is notified. If successful the actionRegistration is redirected to actionIndex(), a FWAUser object is instantiated and initialised, and the user home view is displayed with the users username in the navigation bar. It should be noted that in this processing function a FWAUser object is instantiated, but none of the objects data is initialised. This is because there may be some problem and it would be a waste of processing and memory if this were the case.
+    If the http request is for POST a FWAUser object is instantiated and the register() function is called. This function does some data validation. If unsuccesful the user is notified. If successful the actionRegistration is redirected to actionIndex(), a FWAUser object is instantiated and initialised, and the user home view is displayed with the users username in the navigation bar.
     */
     function processuserregisterrequest() {
            try {
                 if($_SERVER['REQUEST_METHOD'] == "POST") {
-                    $user = new \app\models\FWAUser;
-                    $this->register_status = $user->register($this->log);
+                    $user = new \app\models\FWAUser($this->log);
+                    $this->register_status = $user->register();
                     if(isset($_SESSION['username'])) {
-                        $this->user = new \app\models\FWARegisteredUser;
-                        $this->user->profileget($this->log);
+                        $this->user = new \app\models\FWARegisteredUser($this->log);
+                        $this->user->profileget();
                     }
                 }
                else {
@@ -123,19 +122,19 @@ class SiteController extends Controller
     /*
     The processuserloginrequest() function is used to process a user request for the 'login' page. If the http request is for GET then $user is set to null. The result is that the login view is rendered.
     
-    If the http request is for POST a FWAUser object is instantiated and the login() function is called. This function does some data validation. If unsuccesful the user is notified. If successful the actionLogin is redirected to actionIndex(), a FWAUser object is instantiated and initialised, and the user home view is displayed with the users username in the navigation bar. It should be noted that in this processing function a FWAUser object is instantiated, but none of the objects data is initialised. This is because there may be some problem and it would be a waste of processing and memory if this were the case.
+    If the http request is for POST a FWAUser object is instantiated and the login() function is called. This function does some data validation. If unsuccesful the user is notified. If successful the actionLogin is redirected to actionIndex(), a FWAUser object is instantiated and initialised, and the user home view is displayed with the users username in the navigation bar. 
     */
     function processuserloginrequest() {
        try {
             if($_SERVER['REQUEST_METHOD'] == "POST") {
-                $this->user = new \app\models\FWAUser;
-                $this->login_status = $this->user->login($this->log);
+                $this->user = new \app\models\FWAUser($this->log);
+                $this->login_status = $this->user->login();
                 if(!(isset($_SESSION['username']))) {
                     $this->user = null;
                 }
                 else {
                     $this->user = new \app\models\FWARegisteredUser($this->log);
-                    $this->user->profileget($this->log);
+                    $this->user->profileget();
                 }
             }
             else {
@@ -155,12 +154,12 @@ class SiteController extends Controller
                     $this->user = null;
                 }
                 else if($_SERVER['REQUEST_METHOD'] == "POST"){
-                    $this->user = new \app\models\FWARegisteredUser;
-                    $this->profile_status = $this->user->profilepost($this->log);
+                    $this->user = new \app\models\FWARegisteredUser($this->log);
+                    $this->profile_status = $this->user->profilepost();
                 }
                 else {
-                    $this->user = new \app\models\FWARegisteredUser;
-                    $this->profile_status = $this->user->profileget($this->log);
+                    $this->user = new \app\models\FWARegisteredUser($this->log);
+                    $this->profile_status = $this->user->profileget();
                 }
             }
             catch (Exception $e) {

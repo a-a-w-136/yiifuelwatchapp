@@ -8,8 +8,12 @@ class FWARegisteredUser extends FWAUser {
     public $favourite = false;
     public $favourite_status = "";
     
-    function profilepost($log) {
-        $this->homepagepost($log);
+    function __construct($log) {
+        parent::__construct($log);
+    }
+    
+    function profilepost() {
+        $this->post();
         try {
             $this->verifyposteddata($_POST["locality_name"], $_POST["fuel"], $_POST["distance"]);
             return $this->createfavourite();
@@ -19,8 +23,7 @@ class FWARegisteredUser extends FWAUser {
         }
         
     }
-    function profileget($log) {
-        $this->homepageget($log);
+    function profileget() {
         try {
             $this->getfavourite();
             if($this->favourite) {

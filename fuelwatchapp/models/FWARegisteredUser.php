@@ -16,37 +16,16 @@ class FWARegisteredUser extends FWAUser {
     function __construct($log) {
         parent::__construct($log);
     }
-    
     function profilepost() {
-        try {
-            $this->verifyposteddata($_POST["locality_name"], $_POST["fuel"], $_POST["distance"]);
-            return $this->createfavourite();
-        }
-        catch (Exception $e) {
-            throw $e;
-        }
-        
+        $this->verifyposteddata($_POST["locality_name"], $_POST["fuel"], $_POST["distance"]);
+        return $this->createfavourite();
     }
     function profileget() {
-        try {
-            $this->getfavourite();
-            if($this->favourite) {
-                $this->fuel_search_view = new LinkedList();
-                $this->homepagefavourite();
-            }
-        }
-        catch (Exception $e) {
-            throw $e;
-        }
-        
-    }
-    function homepagefavourite() {
-        try {
+        $this->getfavourite();
+        if($this->favourite) {
+            $this->fuel_search_view = new LinkedList();
             $this->getstationsinrange();
             $this->dbparametersearch(); 
-        }
-        catch (Exception $e) {
-            throw $e;
         }
     }
     function favourite() {

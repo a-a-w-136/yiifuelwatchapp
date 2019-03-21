@@ -1,5 +1,7 @@
 <?php
-
+/*
+This is the Controller for the fuealwatchapp. For each action there is some processing that is required in order to render the desired view. This processing occurrs in the processing functions. Generally, a request is processed and the $user variable is set to either null, an instance of FWAUser or FWARegisteredUser. The appropriate view is rendered according to whether the $user variable is null or not. See processing functions for more details on processing.
+*/
 namespace app\controllers;
 
 use Yii;
@@ -61,6 +63,13 @@ class SiteController extends Controller
         }
         $this->redirect('index');
     }
+    /*
+    The processuserrequest() function is used to process a user request for the 'home' page. If the request is a http Get and the user is not registered then the first if cluse is executed. A FWAUser object is created and a query is executed to find the cheapest fuel for Western Australia for that particular day. The cheapest fuel data would be rendered in the home view. 
+    
+    If the request is a http POST the second then the second (else)if is executed. Note that whether registered or not, on http POST the second if clause will always be executed. This is because registered and non registered users can search the database.
+    
+    If the request is http GET and the user is registered then the third (else)if statement is executed. A FWARegisteredUser object is created. This would gather the data required to display the Registered Users 'favourite' query in the view on the home page. If there is no favourite then the $cheapest_fuel flag is set, so to display the cheapest fuel query. 
+    */
     function processuserrequest() {
         try {
             if($_SERVER["REQUEST_METHOD"] == "GET" && !isset($_SESSION['username'])) {
@@ -88,7 +97,11 @@ class SiteController extends Controller
             exit;
         }
     }
-
+    /*
+    The processuserregisterrequest() function is used to process a user request for the 'register' page. If the http request is for GET then $user is set to null. The result is that the registration view is rendered.
+    
+    If the http request is for POST a FWAUser object is instantiated and the register() function is called. This function does some data validation. If unsuccesful the user is notified. If successful the actionRegistration is redirected to actionIndex(), a FWAUser object is instantiated and initialised, and the user home view is displayed with the users username in the navigation bar. It should be noted that in this processing function a FWAUser object is instantiated, but none of the objects data is initialised. This is because there may be some problem and it would be a waste of processing and memory if this were the case.
+    */
     function processuserregisterrequest() {
            try {
                 if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -107,7 +120,11 @@ class SiteController extends Controller
                 exit;
             }
     }
-
+    /*
+    The processuserloginrequest() function is used to process a user request for the 'login' page. If the http request is for GET then $user is set to null. The result is that the login view is rendered.
+    
+    If the http request is for POST a FWAUser object is instantiated and the login() function is called. This function does some data validation. If unsuccesful the user is notified. If successful the actionLogin is redirected to actionIndex(), a FWAUser object is instantiated and initialised, and the user home view is displayed with the users username in the navigation bar. It should be noted that in this processing function a FWAUser object is instantiated, but none of the objects data is initialised. This is because there may be some problem and it would be a waste of processing and memory if this were the case.
+    */
     function processuserloginrequest() {
        try {
             if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -129,7 +146,9 @@ class SiteController extends Controller
             exit;
         }
     }
-    
+    /*
+    The processuserprofilerequest() function is used to process a user request for the 'profile' page. If the user requests this page and they aren't logged in, then $user is set to null and there is redirection to the home view. If the request is for http POST the Registered Usrers favourite is stored. If the request is for http GET then the Registered Usrers 'favourite'(if any) is retrieved for display.
+    */
     function processuserprofilerequest() {
            try {
                 if(!isset($_SESSION['username'])) {

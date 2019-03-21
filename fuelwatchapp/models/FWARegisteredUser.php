@@ -1,4 +1,9 @@
 <?php
+/*
+FWAregisteredUser represents a Registered User of the fuelwatchapp. A FWARegisteredUser is a FWAUser. The extended functionality of a Registered User is they can createfavourite(), getfavourite() and deleteaccount(). 
+
+
+*/
 namespace app\models;
 use Yii;
 use yii\base\Model;
@@ -13,7 +18,6 @@ class FWARegisteredUser extends FWAUser {
     }
     
     function profilepost() {
-        $this->post();
         try {
             $this->verifyposteddata($_POST["locality_name"], $_POST["fuel"], $_POST["distance"]);
             return $this->createfavourite();
@@ -44,7 +48,6 @@ class FWARegisteredUser extends FWAUser {
         catch (Exception $e) {
             throw $e;
         }
-        
     }
     function favourite() {
         return $this->favourite;
@@ -57,7 +60,7 @@ class FWARegisteredUser extends FWAUser {
                 $sql_delete_favourite = "DELETE FROM favourite WHERE username = '".$_SESSION['username']."'";
                 $result = Yii::$app->db->createCommand($sql_delete_favourite)->execute();
                 if($result == 0) {
-                    $this->favourite_status = "2:Error Creating Favourite";
+                    $this->favourite_status = "1:Error Creating Favourite";
                 }
                 else {
                     $sql_insert_favourite = "INSERT INTO favourite (username, locality_name, distance, product) VALUES ('".$_SESSION['username']."', '".$_POST['locality_name']."', '".$_POST['distance']."', '".$_POST['fuel']."')";
@@ -66,7 +69,7 @@ class FWARegisteredUser extends FWAUser {
                         $this->favourite_status = "Favourite Saved";
                     }
                     else {
-                        $this->favourite_status = "3:Error Creating Favourite";
+                        $this->favourite_status = "2:Error Creating Favourite";
                     }
                 }
             }
@@ -81,7 +84,7 @@ class FWARegisteredUser extends FWAUser {
                 }
             }
         }
-        $this->favourite_status = "5:Error Creating Favourite";
+        $this->favourite_status = "4:Error Creating Favourite";
         
     }
     function getfavourite() {

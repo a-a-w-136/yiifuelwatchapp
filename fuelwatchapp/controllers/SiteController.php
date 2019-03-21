@@ -58,7 +58,7 @@ class SiteController extends Controller
     }
     public function actionUnregister() {
         if(isset($_SESSION['username'])) {
-            $user = new \app\models\FWARegisteredUser;
+            $user = new \app\models\FWARegisteredUser($this->log);
             $user->deleteaccount($this->log);
         }
         $this->redirect('index');

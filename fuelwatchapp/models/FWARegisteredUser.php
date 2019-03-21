@@ -31,7 +31,7 @@ class FWARegisteredUser extends FWAUser {
     function favourite() {
         return $this->favourite;
     }
-    function createfavourite() {
+    private function createfavourite() {
         if($this->verified_input) {
             $sql_exists_fav = "SELECT username FROM favourite WHERE username = '".$_SESSION['username']."'";
             $result = Yii::$app->db->createCommand($sql_exists_fav)->queryOne();
@@ -66,7 +66,7 @@ class FWARegisteredUser extends FWAUser {
         $this->favourite_status = "4:Error Creating Favourite";
         
     }
-    function getfavourite() {
+    private function getfavourite() {
         $sql_favourite = "SELECT username, locality_name, distance, product FROM favourite WHERE username = '".$_SESSION['username']."'";
         $result = Yii::$app->db->createCommand($sql_favourite)->queryOne();
         if($result) {

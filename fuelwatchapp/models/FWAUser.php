@@ -48,24 +48,14 @@ class FWAUser {
         $this->fuel_search_view = new LinkedList();
         $this->stations_within_distance_title = new LinkedList();
         $this->log = fopen($log, 'a');
-        try {
-            $this->querylocalitynames();
-            $this->getcheapestinWA();
-        }
-        catch (Exception $e) {
-            throw $e;
-        }
+        $this->querylocalitynames();
+        $this->getcheapestinWA();
     }
     function post() {
         $this->fuel_search_view = new LinkedList();
-        try {
-            $this->verifyposteddata($_POST["locality_name"], $_POST["fuel"], $_POST["distance"]);
-            $this->getstationsinrange();
-            $this->dbparametersearch();
-        }
-        catch (Exception $e) {
-            throw $e;
-        }
+        $this->verifyposteddata($_POST["locality_name"], $_POST["fuel"], $_POST["distance"]);
+        $this->getstationsinrange();
+        $this->dbparametersearch();
     }
     protected function querylocalitynames() {
         $locations = Yii::$app->db->createCommand($this->sql_locality_names)->queryAll();

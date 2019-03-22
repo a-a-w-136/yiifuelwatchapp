@@ -20,7 +20,7 @@ class FWARegisteredUser extends FWAUser {
         $this->verifyposteddata($_POST["locality_name"], $_POST["fuel"], $_POST["distance"]);
         return $this->createfavourite();
     }
-    function profileget() {
+    function getfavouriteitems() {
         $this->getfavourite();
         if($this->favourite) {
             $this->fuel_search_view = new LinkedList();
@@ -66,7 +66,7 @@ class FWARegisteredUser extends FWAUser {
         $this->favourite_status = "4:Error Creating Favourite";
         
     }
-    private function getfavourite() {
+    function getfavourite() {
         $sql_favourite = "SELECT username, locality_name, distance, product FROM favourite WHERE username = '".$_SESSION['username']."'";
         $result = Yii::$app->db->createCommand($sql_favourite)->queryOne();
         if($result) {

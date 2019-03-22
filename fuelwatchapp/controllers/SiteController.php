@@ -42,12 +42,7 @@ class SiteController extends Controller
             $this->redirect('index');
         }
     }
-    public function actionLogout()
-    {
-        $_SESSION['username'] = null;
-        $this->redirect('index');
-    }
-    public function actionProfile() {
+     public function actionProfile() {
         $this->processuserprofilerequest();
         if($this->user == null) {
             $this->redirect('index');
@@ -55,6 +50,11 @@ class SiteController extends Controller
         else {
             return $this->render('profile', ['user' => $this->user]);
         }
+    }
+    public function actionLogout()
+    {
+        $_SESSION['username'] = null;
+        $this->redirect('index');
     }
     public function actionUnregister() {
         if(isset($_SESSION['username'])) {
@@ -82,7 +82,7 @@ class SiteController extends Controller
             }
             else if(isset($_SESSION['username']) && $_SERVER["REQUEST_METHOD"] == "GET") {
                 $this->user = new \app\models\FWARegisteredUser($this->log);
-                $favourite_status = $this->user->profileget();
+                $favourite_status = $this->user->getfavouriteitems();
                 if(!($this->user->favourite())) {
                     $this->user->cheapest_fuel = true;
                 }
@@ -108,7 +108,7 @@ class SiteController extends Controller
                     $this->register_status = $user->register();
                     if(isset($_SESSION['username'])) {
                         $this->user = new \app\models\FWARegisteredUser($this->log);
-                        $this->user->profileget();
+                        $this->user->getfavouriteitems();
                     }
                 }
                else {
@@ -131,10 +131,6 @@ class SiteController extends Controller
                 $this->login_status = $this->user->login();
                 if(!(isset($_SESSION['username']))) {
                     $this->user = null;
-                }
-                else {
-                    $this->user = new \app\models\FWARegisteredUser($this->log);
-                    $this->user->profileget();
                 }
             }
             else {
@@ -159,13 +155,11 @@ class SiteController extends Controller
                 }
                 else {
                     $this->user = new \app\models\FWARegisteredUser($this->log);
-                    $this->profile_status = $this->user->profileget();
+                    $this->profile_status = $this->user->getfavourite();
                 }
             }
             catch (Exception $e) {
                 exit;
             }
     }
-    
-    
 }

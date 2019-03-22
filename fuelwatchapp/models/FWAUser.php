@@ -43,7 +43,7 @@ class FWAUser {
     function __construct($log) {
         $this->sql_locality_names = "SELECT locality_name FROM wa_locality ORDER BY locality_name";
         $this->fuel_types = array("Unleaded", "Premium Unleaded", "Diesel", "Brand Diesel", "e85", "RON 98", "LPG");
-        $this->distances = array("1" , "5", "10", "15", "20", "25", "30", "35","45", "50", "55", "60", "65", "100", "200", "300", "400", "500", "1000");
+        $this->distances = array("1" , "5", "10", "15", "20", "25", "30", "35","45", "50", "55", "60", "65", "100", "200", "300", "400", "500", "1000", "1500", "2000");
         $this->locality_names = array();
         $this->fuel_search_view = new LinkedList();
         $this->stations_within_distance_title = new LinkedList();
